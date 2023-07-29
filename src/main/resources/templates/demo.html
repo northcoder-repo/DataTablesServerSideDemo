@@ -13,17 +13,36 @@
 
         <div style="margin: 20px;">
 
-            <table id="example" class="display dataTable cell-border" style="width:100%"></table>
+            <table id="example" class="display dataTable cell-border" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Age</th>
+                        <th>Start Date</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+            </table>
 
         </div>
 
         <script>
 
-            $(function () {
+            var offices = [ 'One', 'Two', 'Three' ];
+
+            $(document).ready(function () {
+
+                $('#example thead tr')
+                        .clone(true)
+                        .addClass('filters')
+                        .appendTo('#example thead');
 
                 $('#example').DataTable({
                     serverSide: true,
                     processing: true,
+                    orderCellsTop: true,
                     search: {
                         return: true
                     },
@@ -35,6 +54,7 @@
                         type: "POST",
                         contentType: "application/json",
                         data: function (d) {
+                            d.columns[2].search.value = $('select#office option').filter(':selected').val();
                             return JSON.stringify(d);
                         }
                     },
@@ -44,8 +64,24 @@
                         {title: "Office", data: "office"},
                         {title: "Age", data: "age"},
                         {title: "Start Date", data: "startDate"},
-                        {title: "Salary", data: "salary"}
-                    ]
+                        {title: "Salary", data: "salary", searchable: false}
+                    ],
+                    initComplete: function () {
+                        let api = this.api();
+                        api.columns().eq(0).each(function (colIdx) {
+                            let cell = $('.filters th').eq($(api.column(colIdx).header()).index());
+                            let title = $(cell).text();
+                            cell.text('');
+                            if (colIdx === 2) { // 'office' column
+                                let id = title.toLowerCase().replaceAll(' ', '_');
+                                var sel = $('<select id="' + id + '">').appendTo($(cell));
+                                sel.append($("<option>").attr('value', '').text('-- choose --'));
+                                $(offices).each(function () {
+                                    sel.append($("<option>").attr('value', this).text(this));
+                                });
+                            } 
+                        });
+                    }
                 });
 
             });
