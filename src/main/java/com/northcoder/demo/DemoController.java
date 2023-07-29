@@ -5,6 +5,7 @@ import com.northcoder.demo.services.ResponseContainer;
 import com.northcoder.demo.services.request.ServerSideRequest;
 import jakarta.inject.Inject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +24,8 @@ public class DemoController {
     }
 
     @GetMapping(path = "/listing")
-    public String getListing() {
+    public String getListing(Model model) {
+        model.addAttribute("offices", service.getOffices());
         return "demo"; // demo.html
     }
 

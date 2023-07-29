@@ -24,6 +24,13 @@ public class DemoRepositoryImpl implements DemoRepository {
         from datatables.employees
     """;
 
+    private final String officesList = """
+        select distinct office
+        from datatables.employees
+        where office is not null
+        order by 1
+    """;
+
     @Inject
     public DemoRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -59,6 +66,11 @@ public class DemoRepositoryImpl implements DemoRepository {
                 employeeMapper
         );
         return employees;
+    }
+
+    @Override
+    public List<String> getOffices() {
+        return jdbcTemplate.queryForList(officesList, String.class);
     }
 
     //

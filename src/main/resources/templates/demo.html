@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>Demo</title>
@@ -28,12 +28,11 @@
 
         </div>
 
-        <script>
-
-            var offices = [ 'One', 'Two', 'Three' ];
+        <script th:inline="javascript">
 
             $(document).ready(function () {
 
+                // build extra header row for filtering:
                 $('#example thead tr')
                         .clone(true)
                         .addClass('filters')
@@ -67,7 +66,9 @@
                         {title: "Salary", data: "salary", searchable: false}
                     ],
                     initComplete: function () {
+                        // build a drop-down list for the Office column:
                         let api = this.api();
+                        let office_names = /*[[${offices}]]*/ []; // from Thymeleaf
                         api.columns().eq(0).each(function (colIdx) {
                             let cell = $('.filters th').eq($(api.column(colIdx).header()).index());
                             let title = $(cell).text();
@@ -75,11 +76,17 @@
                             if (colIdx === 2) { // 'office' column
                                 let id = title.toLowerCase().replaceAll(' ', '_');
                                 var sel = $('<select id="' + id + '">').appendTo($(cell));
-                                sel.append($("<option>").attr('value', '').text('-- choose --'));
-                                $(offices).each(function () {
+                                sel.append($("<option>").attr('value', '').text('-- all offices --'));
+                                $(office_names).each(function () {
                                     sel.append($("<option>").attr('value', this).text(this));
                                 });
-                            } 
+                            }
+                            // add a change event for the Office drop-down:
+                            $('select', $('.filters th').eq($(api.column(colIdx).header()).index()))
+                                    .off('change')
+                                    .on('change', function () {
+                                        api.draw(); // re-trigger the ajax call
+                                    });
                         });
                     }
                 });

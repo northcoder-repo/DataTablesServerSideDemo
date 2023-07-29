@@ -26,4 +26,8 @@ public class EmployeeService {
         return new ResponseContainer(ssr.draw(), tableCount, filteredCount, currentPage);
     }
 
+    public List<String> getOffices() {
+        return demoRepository.getOffices();
+    }
+
 }

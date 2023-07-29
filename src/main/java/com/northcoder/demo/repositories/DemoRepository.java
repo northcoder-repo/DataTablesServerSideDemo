@@ -14,4 +14,6 @@ public interface DemoRepository extends CrudRepository<Employee, Long> {
     public long countFiltered(SqlQuery sqlQuery);
 
     public List<Employee> getCurrentPage(SqlQuery sqlQuery);
+
+    public List<String> getOffices();
 }
