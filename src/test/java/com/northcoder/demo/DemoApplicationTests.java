@@ -39,7 +39,17 @@ class DemoApplicationTests {
         SqlQuery sqlQuery = new SqlQuery(ssr);
         String actualSql = sqlQuery.getSqlString();
         Object[] actualParams = sqlQuery.getParams();
-        String expectedSql = "select name, position, office, age, start_date, salary from datatables.employees where (name like concat(?, '%') or position like concat(?, '%') or office like concat(?, '%') or age like concat(?, '%') or start_date like concat(?, '%') or salary like concat(?, '%')) and office = ? order by 4 asc limit 10 offset 0";
+        String expectedSql = "select name, position, office, age, start_date, salary "
+                + "from datatables.employees "
+                + "where (name like concat(?, '%') "
+                + "or position like concat(?, '%') "
+                + "or office like concat(?, '%') "
+                + "or age like concat(?, '%') "
+                + "or start_date like concat(?, '%') "
+                + "or salary like concat(?, '%')) "
+                + "and office = ? "
+                + "order by 4 asc "
+                + "limit 10 offset 0";
         Object[] expectedParams = {"t", "t", "t", "t", "t", "t", "Edinburgh"};
 
         assertThat(expectedSql).isEqualTo(actualSql);
