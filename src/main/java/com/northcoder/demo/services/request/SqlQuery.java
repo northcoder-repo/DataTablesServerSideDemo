@@ -117,7 +117,9 @@ public class SqlQuery {
 
     private boolean colWillBeSearched(Column col) {
         // column is searchable and has a search value:
-        return col.searchable() && col.search().value() != null && !col.search().value().isEmpty();
+        return col.searchable()
+                && col.search().value() != null
+                && !col.search().value().isEmpty();
     }
 
     private String buildColumnsWhereClause(ServerSideRequest ssr, String whereClauseGlob) {
