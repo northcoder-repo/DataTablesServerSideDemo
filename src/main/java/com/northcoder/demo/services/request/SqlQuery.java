@@ -115,13 +115,18 @@ public class SqlQuery {
         return sb.append(") ").toString();
     }
 
+    private boolean colWillBeSearched(Column col) {
+        // column is searchable and has a search value:
+        return col.searchable() && col.search().value() != null && !col.search().value().isEmpty();
+    }
+
     private String buildColumnsWhereClause(ServerSideRequest ssr, String whereClauseGlob) {
         // just a demo using one column - the Office col, as a
         // drop-down list, consisting of an exact office name
 
         // first see if we have any column filter values:
         long count = ssr.columns().stream().filter(
-                col -> col.search().value() != null && !col.search().value().isEmpty()
+                col -> colWillBeSearched(col)
         ).count();
         if (count == 0) {
             return "";
@@ -137,7 +142,7 @@ public class SqlQuery {
         }
 
         for (Column col : ssr.columns()) {
-            if (col.searchable() && col.search().value() != null && !col.search().value().isBlank()) {
+            if (colWillBeSearched(col)) {
                 sb.append(Employee.sqlColumn(col.data()))
                         // just our one demo drop-down column:
                         .append(" = ? and ");
