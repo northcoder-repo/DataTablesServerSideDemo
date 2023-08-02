@@ -23,7 +23,7 @@ class DemoApplicationTests {
     private DemoController demoController;
 
     //
-    // Loads the Spring app context:
+    // @SpringBootTest loads the Spring app context, so we can do this:
     //
     @Test
     public void contextLoads() {
