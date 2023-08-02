@@ -26,8 +26,8 @@ public class SqlQuery {
         String countClause = "select count(1) ";
         String selectClause = buildSelectClause(ssr);
         String fromClause = buildFromClause();
-        String whereClauseGlob = buildGlobalWhereClause(ssr);
-        String whereClauseCols = buildColumnsWhereClause(ssr, whereClauseGlob);
+        String whereClauseGlob = buildGlobalSearchWhereClause(ssr);
+        String whereClauseCols = buildColumnSearchWhereClause(ssr, whereClauseGlob);
         String orderByClause = buildOrderByClause(ssr);
         String limitOffsetClause = buildLimitOffsetClause(ssr);
 
@@ -74,7 +74,7 @@ public class SqlQuery {
         return sb.toString();
     }
 
-    private String buildGlobalWhereClause(ServerSideRequest ssr) {
+    private String buildGlobalSearchWhereClause(ServerSideRequest ssr) {
         //
         // This logic assumes the database is MySQL and the table's collation is
         // utf8mb4_0900_ai_ci, where:
@@ -122,7 +122,7 @@ public class SqlQuery {
                 && !col.search().value().isEmpty();
     }
 
-    private String buildColumnsWhereClause(ServerSideRequest ssr, String whereClauseGlob) {
+    private String buildColumnSearchWhereClause(ServerSideRequest ssr, String whereClauseGlob) {
         // just a demo using one column - the Office col, as a
         // drop-down list, consisting of an exact office name
 
