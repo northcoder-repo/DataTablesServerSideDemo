@@ -11,6 +11,9 @@ public record Employee(
         LocalDate startDate,
         String salary) {
 
+    // as well as mapping from entity field names to DB column names, this
+    // acts as a "safe list" to ensure the DataTable column names are handled
+    //  safely when building a dynamically generated SQL statement.
     private static final Map<String, String> fieldToColumn = Map.of(
             "name", "name",
             "position", "position",
